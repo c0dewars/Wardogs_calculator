@@ -1,73 +1,146 @@
-# WARDOGS Coordinate Calculator
+# WARDOGS Calculator
 
-Lightweight C# Windows Forms app. Two coordinate text inputs; large distance,
-bearing and compass direction outputs. Offline, event-driven; no polling,
-web browser, screen capture, telemetry, or game integration.
+A lightweight Windows desktop calculator for WARDOGS. Paste your position and a target position to calculate the distance, bearing, and compass direction between them.
 
-## Run on Windows
+Built with C# and Windows Forms on .NET 8.
 
-Install the .NET 8 SDK or a newer SDK capable of targeting .NET 8.
-Open a terminal in this extracted folder:
+## Download and run
+
+**[Download WardogsCalculator.exe for Windows x64](https://github.com/c0dewars/Wardogs_calculator/releases/download/v0.1.0/WardogsCalculator.exe)**
+
+1. Open the [v0.1.0 release page](https://github.com/c0dewars/Wardogs_calculator/releases/tag/v0.1.0).
+2. Under **Assets**, select **WardogsCalculator.exe**. The source-code archives are for developers, not the ready-to-run application.
+3. Save the executable in a folder of your choice.
+4. Double-click **WardogsCalculator.exe** to open the calculator.
+
+No installation, administrator privileges, or separate .NET installation is required for this standalone build.
+
+![GitHub release page showing the executable under Assets](download-release.jpg)
+
+## How to use
+
+![WARDOGS Calculator main window](calculator-window.png)
+
+The grey coordinate examples shown in the empty fields are placeholders, not entered locations. Paste both locations to show a result.
+
+1. Copy your position's X/Y coordinate text from the game.
+2. Paste it into **A — Our location**, using the **Paste** button or **Ctrl+V**.
+3. Copy the enemy or target position and paste it into **B — Enemy location**.
+4. Read the results, which update automatically:
+   - **Distance:** straight-line distance from A to B in metres.
+   - **Bearing:** direction from A to B in degrees, clockwise from north.
+   - **Direction:** the nearest of eight compass directions.
+5. Keep A unchanged while updating B for new targets. Update A whenever your firing position changes.
+
+Enable **Always on top** to keep the calculator above other normal windows. Use borderless/windowed gameplay or a second monitor if exclusive fullscreen hides the calculator. **Clear** empties both inputs.
+
+Enable **Y increases southward** only if larger Y coordinates correspond to south on the map. The default assumes Y increases northward. This changes the bearing, not the distance.
+
+## Features
+
+- Two coordinate inputs: **A — Our location** and **B — Enemy location**.
+- Paste buttons and standard Ctrl+V support.
+- Decimal dots and commas, including mixed formats.
+- Large distance, bearing, and direction displays that update as inputs change.
+- East/west and north/south distance breakdown.
+- Optional always-on-top window and configurable Y-axis orientation.
+- Offline operation, with calculations triggered only by input changes.
+
+## Requirements
+
+- Windows x64 for the standalone executable.
+- .NET 8 SDK or a newer compatible SDK to build from source.
+
+The standalone build includes its runtime. Windows Forms does not run natively on macOS or Linux.
+
+## Run from source
+
+Open a terminal in the project folder:
 
 ```powershell
 dotnet run --project WardogsCalculator.csproj
 ```
 
-Or open WardogsCalculator.csproj in Visual Studio with the .NET desktop workload.
+Alternatively, open `WardogsCalculator.csproj` in Visual Studio with the .NET desktop development workload installed.
 
-## Make a standalone Windows x64 executable
+## Build a standalone executable
 
-With the SDK installed, double-click **Build-Windows.cmd**. It publishes a
-self-contained executable and runs the included C# self-tests. Internet is
-required for the first build to restore dependencies. The result is
-`publish/WardogsCalculator.exe`; copy it anywhere and double-click to run.
-No installer, administrator privileges, or separate .NET runtime is needed
-on the destination PC. The SDK is required only on the build PC.
+Double-click `Build-Windows.cmd`. The script publishes the application, runs its self-tests, and opens the output folder.
 
-Equivalent publish command:
+The executable is created at:
 
-```powershell
-dotnet publish WardogsCalculator.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish
+```text
+publish/WardogsCalculator.exe
 ```
 
-Run publish/WardogsCalculator.exe. The standalone bundle includes .NET and is
-larger on disk than the source. File size is not a RAM usage measurement.
+Copy the executable to a Windows x64 PC and double-click it to run. No installer or separate .NET runtime is required. The first build requires internet access to restore dependencies.
 
-## Use
+To publish manually:
 
-Paste one coordinate pair into A and one into B using Ctrl+V or the Paste buttons.
-Examples: `x98.43, y110.38`, `A= x98.43, y110.38`, `X:98.43 Y:110.38`.
-Decimal dots and commas are both accepted: `x98.43, y110,38` and
-`x98,43, y110,38` mean the same coordinates. Only numeric decimal commas
-are normalized; the separator between X and Y remains intact. Spaces, signs,
-case differences, optional labels, and comma/semicolon separators are supported.
-Outputs refresh on input changes. Invalid text clears old results.
+```powershell
+dotnet publish WardogsCalculator.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:DebugType=None -p:DebugSymbols=false -o publish
+```
 
-Scale is 100 metres per coordinate unit, matching the supplied reference tool.
-X increases eastward. Y defaults northward; select "Y increases southward" if
-that matches the game's map. Confirm this orientation against a known pair of
-positions before relying on the bearing. Bearings are clockwise from north.
-Directions use eight compass sectors. Coincident positions have no direction.
+## Coordinate input
 
-Sample A `x98.43, y110.38`, B `x94.53, y109.03`:
-412.7045 m, approximately 250.9 degrees, W with Y northward.
-With Y southward: approximately 289.1 degrees, W. Distance is unchanged.
+Paste one coordinate pair into each input. Supported examples:
 
-Always on top is a normal Windows window; use borderless/windowed gameplay or a
-second monitor. Exclusive fullscreen may hide it. No injected game overlay.
-Mortar elevation is not included: it needs weapon-specific game calibration.
+```text
+x98.43, y110.38
+x98.43, y110,38
+x98,43, y110,38
+A= x98.43, y110.38
+X:98.43 Y:110.38
+```
 
-## Verification
+Decimal commas are normalized within each number. The separator between the X and Y coordinates is preserved. Invalid or incomplete input clears the previous result.
 
-Included self-tests cover the sample, parsing failures, cardinal bearings,
-Y-axis reversal, and coincident locations. On Windows:
+### Example
+
+| Position | Coordinates |
+| --- | --- |
+| A | `x98.43, y110.38` |
+| B | `x94.53, y109.03` |
+
+With Y increasing northward:
+
+| Output | Result |
+| --- | --- |
+| Distance | 412.70 m, displayed as 413 m |
+| Bearing | 250.9°, displayed as 251° |
+| Compass direction | W |
+| Offset | 390 m west and 135 m south |
+
+## Calculation conventions
+
+Each coordinate unit represents **100 metres**. X increases eastward. Y defaults to increasing northward; enable **Y increases southward** when appropriate for the map.
+
+```text
+east  = (Bx - Ax) × 100
+north = (By - Ay) × 100
+range = sqrt(east² + north²)
+bearing = (atan2(east, north) × 180 / π + 360) mod 360
+```
+
+When Y increases southward, the north component is negated. Bearings are clockwise from north: 0° north, 90° east, 180° south, and 270° west. Compass labels use eight sectors. Coincident positions have no bearing or direction.
+
+Confirm the coordinate scale and Y-axis orientation against known positions in the game.
+
+## Tests
+
+Run the parser and calculation self-tests:
 
 ```powershell
 dotnet run --project WardogsCalculator.csproj -- --self-test
 ```
 
-Successful tests exit without showing a window; failures throw an exception.
-The Windows x64 executable was cross-compiled successfully with .NET SDK
-8.0.425. The actual C# parsing and calculation self-tests passed in a Linux
-console harness. The Windows interface has not been run or visually tested
-here. Resource usage has not been benchmarked.
+The tests cover decimal dots and commas, invalid input, sample distance, cardinal bearings, reversed Y-axis orientation, and coincident positions. Successful tests exit without opening a window; failed tests throw an exception.
+
+## Limitations
+
+- Always on top uses a standard Windows window. Exclusive fullscreen may hide it; use borderless/windowed mode or a second monitor.
+- The application does not read game memory, capture the screen, or inject an overlay.
+- Mortar elevation is not calculated; it requires weapon-specific calibration data.
+- Resource usage has not been benchmarked. Windows display scaling and layout require verification on the target PC.
+
+This is an independent utility and is not affiliated with WARDOGS.
