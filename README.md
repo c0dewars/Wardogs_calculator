@@ -15,8 +15,6 @@ Built with C# and Windows Forms on .NET 8.
 
 No installation, administrator privileges, or separate .NET installation is required for this standalone build.
 
-![GitHub release page showing the executable under Assets](download-release.jpg)
-
 ## How to use
 
 ![WARDOGS Calculator main window](calculator-window.png)
