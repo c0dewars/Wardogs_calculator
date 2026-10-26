@@ -1,4 +1,4 @@
-# WARDOGS Calculator
+# WARDOGS Mortar Calculator
 
 A lightweight Windows desktop calculator for WARDOGS. Paste your position and a target position to calculate the distance, bearing, and compass direction between them.
 
